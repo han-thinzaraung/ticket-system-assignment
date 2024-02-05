@@ -70,7 +70,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{ route('user.create') }}" class="nav-link">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>
                 Create User
@@ -79,7 +79,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{ route('user.index') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 User List
