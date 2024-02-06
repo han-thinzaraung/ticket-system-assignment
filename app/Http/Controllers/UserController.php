@@ -29,9 +29,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        //return view('user.create');
-          $users = User::all();
-          return view('user.create', compact('users'));
+        return view('user.create');
+
     }
 
     /**
@@ -42,6 +41,7 @@ class UserController extends Controller
      */
     public function store(StoreUserRequest $request)
     {
+        
         $password =Crypt::encrypt($request->password);
         $user = new User();
         $user->name = $request->name;

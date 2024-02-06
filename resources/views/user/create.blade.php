@@ -10,7 +10,7 @@
                 <div class="card-body align-items-center m-4">
                     <h3 class="text-dark mb-3"> Create User </h3>
 
-                    <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('user.store') }}" method="post">
                         @csrf
                     
                         <div class="col-auto">
@@ -35,10 +35,8 @@
                         <div class="col-auto">
                             <label for="role">Select Role:</label>
                             <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
-                                @foreach($users as $user)
                                     <option value="2">Regular User</option>
                                     <option value="1">Agent</option>
-                                @endforeach
                             </select>
 
                             @error('role')
