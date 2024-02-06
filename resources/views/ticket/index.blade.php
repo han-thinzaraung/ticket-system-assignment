@@ -3,11 +3,11 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-body shadow">
 
-                    <h3 class="text-dark mb-3"> Label List </h3>
+                    <h3 class="text-dark mb-3"> Ticket List </h3>
 
                     @if(session('success'))
                     <div class="alert alert-success alert-dismissible" role="alert"> 
@@ -41,24 +41,32 @@
                         <thead class="table-primary">
                           <tr>
                             <th scope="col">ID</th>
-                            <th scope="col">Label Name</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Priority</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Category</th>
+                            <th scope="col">Label</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
                         <tbody>
                             
-                            @foreach ($labels as $label)
+                            @foreach ($tickets as $ticket)
                             <tr>
                                 <th scope="row">{{ $loop->iteration }}</th>
-                                <td>{{ $label->name }}</td>
+                                <td>{{ $ticket->title }}</td>
+                                <td>{{ $ticket->priority }}</td>
+                                <td>{{ $ticket->status }}</td>
+                                <td>{{ $ticket->category->name }}</td>
+                                <td>{{ $ticket->label->name }}</td>
                                 <td>
-                                    <a href="{{ route('label.edit', $label->id) }}" class="btn btn-outline-warning">
+                                    <a href="{{ route('ticket.edit', $ticket->id) }}" class="btn btn-outline-warning">
                                       <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="{{ route('label.show', $label->id) }}" class="btn btn-outline-primary">
+                                    <a href="{{ route('ticket.show', $ticket->id) }}" class="btn btn-outline-primary">
                                         <i class="fas fa-info"></i>
                                     </a>
-                                   <form method="post" action = "{{ route('label.destroy', $label->id) }}" class="d-inline-block">
+                                   <form method="post" action = "{{ route('ticket.destroy', $ticket->id) }}" class="d-inline-block">
                                     @method('delete')
                                     @csrf
                                     <button class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt"></i></button>

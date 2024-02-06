@@ -15,6 +15,8 @@ class LabelController extends Controller
      */
     public function index()
     {
+        $labels = Label::all();
+        return view('label.index',compact('labels'));
         
     }
 
@@ -39,7 +41,7 @@ class LabelController extends Controller
         $label = new Label();
         $label->name = $request->name;
         $label->save();
-        return redirect()->route('label.index')->with('success','New User is created Successfullly');
+        return redirect()->route('label.index')->with('success','New Label is created Successfullly');
 
     }
 
@@ -51,7 +53,7 @@ class LabelController extends Controller
      */
     public function show(Label $label)
     {
-        //
+        return view('label.detail',compact('label'));
     }
 
     /**
@@ -62,7 +64,7 @@ class LabelController extends Controller
      */
     public function edit(Label $label)
     {
-        //
+        return view('label.edit', compact('label'));
     }
 
     /**
@@ -74,7 +76,9 @@ class LabelController extends Controller
      */
     public function update(UpdateLabelRequest $request, Label $label)
     {
-        //
+        $label->name = $request->name;
+        $label->update();
+        return redirect()->route('label.index')->with('update','Label is Updated Successfully');
     }
 
     /**
@@ -85,6 +89,11 @@ class LabelController extends Controller
      */
     public function destroy(Label $label)
     {
-        //
+       
+        if($label){
+            $label->delete();
+        }
+        return redirect()->back()->with('delete','Item is Deleted Successfully');
+
     }
 }

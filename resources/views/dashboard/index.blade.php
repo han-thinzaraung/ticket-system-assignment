@@ -88,7 +88,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{ route('ticket.create') }}" class="nav-link">
               <i class="nav-icon fas fa-plus-circle"></i>
               <p>
                 Create Ticket
@@ -97,7 +97,7 @@
           </li>
 
           <li class="nav-item">
-            <a href="" class="nav-link">
+            <a href="{{ route('ticket.index') }}" class="nav-link">
               <i class="nav-icon fas fa-th"></i>
               <p>
                 Ticket List

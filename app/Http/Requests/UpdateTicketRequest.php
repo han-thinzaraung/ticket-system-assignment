@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreLabelRequest extends FormRequest
+class UpdateTicketRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,7 +24,11 @@ class StoreLabelRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:labels'
+            'title' => 'required',
+            'priority' => 'required',
+            'status' => 'required',
+            'category_id' => 'required', 
+            'label_id' => 'required'      
         ];
     }
 }
