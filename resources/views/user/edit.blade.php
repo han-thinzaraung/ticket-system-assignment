@@ -49,20 +49,26 @@
 
                 <div class="col-auto">
                     <label  class="col-form-label">Password<small class="text-danger">*</small></label>
-                    <input type="text"  class="form-control @error('password') is-invalid @enderror" name="password" value="{{ $user->password = bcrypt('password') }}">
+                    <input type="text"  class="form-control @error('password') is-invalid @enderror" name="password" value="{{ decrypt($user->password ) }}">
 
                     @error('password')
                     <div class="text-danger">*{{$message}}</div>
                     @enderror
 
                 </div>
-                   
+                
+                <div class="col-auto mt-3 mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="adminCheckBox" name="adminCheckBox" {{ $user->is_checked ? 'checked' : '' }}>
+                    <label class="form-check-label" for="adminCheckBox">Admin Role</label>
+                </div>
                  
                 <div class="col-sm mt-3">
                 <a href="{{ route('user.index') }}" class="btn btn-outline-dark">Back</a>
                 <button type="submit" class="btn btn-outline-primary">Update</button>
-                
                 </div>
+
+
+
                 </form>
                 </div>
             </div>

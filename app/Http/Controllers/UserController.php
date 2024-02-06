@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -38,7 +40,7 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
         $password =Crypt::encrypt($request->password);
         $user = new User();
@@ -59,7 +61,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+        return view('user.detail',compact('user'));
     }
 
     /**
@@ -71,7 +74,6 @@ class UserController extends Controller
     public function edit($id)
     {
         $user= User::find($id);
-        $user->password = Crypt::decrypt($user->password);
         return view('user.edit', compact('user'));
     }
 
@@ -82,13 +84,21 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $password =Crypt::encrypt($request->password);
         $user = User::find($id);
         $user->name = $request->name;
         $user->email = $request->email;
-        $user->role = $request->role;
+        // $user->role = $request->role;
+        if ($request->has('adminCheckBox')) {
+            // If checkbox is checked, set the role to 'admin'
+            $role = "0";
+        } else {
+            // If checkbox is not checked, set the role based on the selected role from the dropdown
+            $role = $request->input('role');
+        }
+        $user->role = $role;
         $user->password = $password;
         $user->update();
         return redirect()->route('user.index')->with('update','User is Updated Successfully');

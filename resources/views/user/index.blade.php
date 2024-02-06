@@ -54,7 +54,15 @@
                                 <th scope="row">{{ $loop->iteration }}</th>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->email }}</td>
-                                <td>{{ $user->role }}</td>
+                                <td>
+                                    @if($user->role == "0")
+                                    Admin
+                                    @elseif($user->role == "1")
+                                    Agent
+                                    @elseif($user->role == "2")
+                                    Regular User
+                                    @endif  
+                                </td>
                                 <td>
                                     <a href="{{ route('user.edit', $user->id) }}" class="btn btn-outline-warning">
                                       <i class="fas fa-pencil-alt"></i>
