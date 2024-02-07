@@ -9,7 +9,7 @@
 
                 <h3 class="text-dark mb-3"> Edit Ticket </h3>
 
-                <form action="{{route('ticket.update' , $ticket->id)}}" method="post" >
+                <form action="{{route('ticket.update' , $ticket->id)}}" method="post" enctype="multipart/form-data">
                 @method('PUT')
                 @csrf
                
@@ -25,6 +25,16 @@
                 <div class="col-auto">
                     <label  class="col-form-label">Description</label><small class="text-danger">*</small></label>
                     <textarea class="form-control" name="description">{{ $ticket->description }}</textarea>
+                </div>
+
+                <div class="col-auto">
+                    <label class="col-form-label">Upload Image<small class="text-danger">*</small></label>
+                    <input type="file"  class="form-control" name="file">
+
+                    @error('file')
+                    <div class="text-danger">*{{$message}}</div>
+                    @enderror
+
                 </div>
 
                 <div class="col-auto">
@@ -50,39 +60,26 @@
                         <div class="text-danger">*{{$message}}</div>
                     @enderror
                 </div>
-                <div class="col-auto">
-                    <label for="category_id">Select Category:</label>
-                    <select name="category_id" id="category_id" class="form-control @error('category_id') is-invalid @enderror">
-                        @foreach($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
 
-                    @error('category_id')
-                        <div class="text-danger">*{{$message}}</div>
-                    @enderror
+                <div class="mb-3 mt-2 col-auto">
+                    <label for="role" class="form-label">Categories</label><br>
+                    @foreach($categories as $category)
+                        <input type="checkbox" value="{{ $category->id }}" name="category_id[]">
+                        <label for="category{{ $category->id }}">{{ $category->name }}</label><br>
+                    @endforeach
                 </div>
-                <div class="col-auto">
-                    <label for="label_id">Select Label:</label>
-                    <select name="label_id" id="label_id" class="form-control @error('label_id') is-invalid @enderror">
-                        @foreach($labels as $label)
-                            <option value="{{ $label->id }}">{{ $label->name }}</option>
-                        @endforeach
-                    </select>
-
-                    @error('label_id')
-                        <div class="text-danger">*{{$message}}</div>
-                    @enderror
+                <div class="mb-3 mt-2 col-auto">
+                    <label for="role" class="form-label">Labels</label><br>
+                    @foreach($labels as $label)
+                        <input type="checkbox" value="{{ $label->id }}" name="label_id[]">
+                        <label for="label{{ $label->id }}">{{ $label->name }}</label><br>
+                    @endforeach
                 </div>
 
-
-                 
                 <div class="col-sm mt-3">
                 <a href="{{ route('ticket.index') }}" class="btn btn-outline-dark">Back</a>
                 <button type="submit" class="btn btn-outline-primary">Update</button>
                 </div>
-
-
 
                 </form>
                 </div>

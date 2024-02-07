@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LabelController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
@@ -28,3 +29,4 @@ Route::resource('user',UserController::class);
 Route::resource('label',LabelController::class);
 Route::resource('category',CategoryController::class);
 Route::resource('ticket',TicketController::class);
+Route::resource('comment',CommentController::class);

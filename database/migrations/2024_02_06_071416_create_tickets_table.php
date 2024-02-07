@@ -21,8 +21,6 @@ class CreateTicketsTable extends Migration
             $table->string('priority')->default('low');
             $table->string('status')->default('open');
             // $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('label_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
     }

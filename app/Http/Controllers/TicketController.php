@@ -45,15 +45,32 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-        $ticket = new Ticket;
+
+        $file = $request->file('file'); // Accessing the file correctly
+ 
+        if ($file) {
+            $newName = "gallery_" . uniqid() . "." . $file->extension();
+            $file->storeAs("public/gallery", $newName);
+        } else {
+
+        }
+ 
+        $ticket = new Ticket();
         $ticket->title = $request->title;
         $ticket->description = $request->description;
+        $ticket->file = $newName;
         $ticket->priority = $request->priority;
         $ticket->status = $request->status;
-        $ticket->category_id = $request->category_id;
-        $ticket->label_id= $request->label_id;
+        // $ticket->file = $request->file;
         $ticket->save();
-        return redirect()->route('ticket.index')->with('success','New Ticket is Created Successfully');
+        if($request->category_id){
+            $ticket->category()->attach($request->category_id);
+        }
+        if($request->label_id)
+        {
+            $ticket->label()->attach($request->label_id);
+        }
+        return redirect()->route('ticket.index')->with('success','Ticket is created successfully');
     }
 
     /**
@@ -91,13 +108,27 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
+        $file = $request->file('file'); // Accessing the file correctly
+ 
+        if ($file) {
+            $newName = "gallery_" . uniqid() . "." . $file->extension();
+            $file->storeAs("public/gallery", $newName);
+        } else {
+
+        }
         $ticket->title = $request->title;
         $ticket->description = $request->description;
+        $ticket->file = $newName;
         $ticket->priority = $request->priority;
         $ticket->status = $request->status;
-        $ticket->category_id = $request->category_id;
-        $ticket->label_id= $request->label_id;
         $ticket->update();
+        if($request->category_id){
+            $ticket->category()->attach($request->category_id);
+        }
+        if($request->label_id)
+        {
+            $ticket->label()->attach($request->label_id);
+        }
         return redirect()->route('ticket.index')->with('update','Ticket is Updated Successfully');
     }
 

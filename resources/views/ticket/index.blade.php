@@ -44,8 +44,7 @@
                             <th scope="col">Title</th>
                             <th scope="col">Priority</th>
                             <th scope="col">Status</th>
-                            <th scope="col">Category</th>
-                            <th scope="col">Label</th>
+                            <th scope="col">Attached File</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
@@ -57,8 +56,7 @@
                                 <td>{{ $ticket->title }}</td>
                                 <td>{{ $ticket->priority }}</td>
                                 <td>{{ $ticket->status }}</td>
-                                <td>{{ $ticket->category->name }}</td>
-                                <td>{{ $ticket->label->name }}</td>
+                                <td> <img src="{{ asset('storage/gallery/'. $ticket->file) }}" alt="{{ $ticket->name }}" style="max-width: 50px; max-height: 50px;" ></td>
                                 <td>
                                     <a href="{{ route('ticket.edit', $ticket->id) }}" class="btn btn-outline-warning">
                                       <i class="fas fa-pencil-alt"></i>

@@ -25,8 +25,16 @@
                                 <td>{{ $ticket->description }}</td>
                                 <td>{{ $ticket->priority }}</td>
                                 <td>{{ $ticket->status }}</td>
-                                <td>{{ $ticket->category->name }}</td>
-                                <td>{{ $ticket->label->name }}</td>
+                                <td>
+                                  @foreach($ticket->category as $category)
+                                        {{ $category->name }}
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach($ticket->label as $label)
+                                          {{ $label->name }}
+                                      @endforeach
+                                  </td>
                             </tr>
                         </tbody>     
                     </table>
@@ -35,7 +43,52 @@
                     </div>       
                 </div>
             </div>
+           
         </div>
     </div>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body shadow">
+                            <form class="row g-2" action="{{ route('comment.store') }}" method="post">
+                                @csrf
+                                <div class="col-auto">
+                                  <label for="inputtext" class="">Comment</label>
+                                  <input type="text" class="form-control mb-3" id="inputtext" placeholder="Add comment" name="message"> 
+                                  <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                                  <button type="submit" class="btn btn-primary">Send</button>
+                                  </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        @foreach($ticket->comment as $comment)
+                        <div class="card-body shadow">
+                            <div class="row justify-content-around">
+                                <div class="col-auto">
+                                    <h5 class="card-title">{{ $comment->user->name}}</h5>
+                                    <p class="card-text">{{ $comment->message }}</p>
+                                </div>
+                                <div class="col-auto">
+                                    <form method="post" action = "{{ route('comment.destroy', $comment->id) }}" class="d-inline-block">
+                                        @method('delete')
+                                        @csrf
+                                        <button class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+       
+       
 </div>
 @endsection
