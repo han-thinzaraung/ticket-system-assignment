@@ -14,6 +14,7 @@
                             <th scope="col">Description</th>
                             <th scope="col">Priority</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Attached File</th>
                             <th scope="col">Category</th>
                             <th scope="col">Label</th>
                         </tr>
@@ -25,6 +26,7 @@
                                 <td>{{ $ticket->description }}</td>
                                 <td>{{ $ticket->priority }}</td>
                                 <td>{{ $ticket->status }}</td>
+                                <td> <img src="{{ asset('storage/gallery/'. $ticket->file) }}" alt="{{ $ticket->name }}" style="max-width: 50px; max-height: 50px;" ></td>
                                 <td>
                                   @foreach($ticket->category as $category)
                                         {{ $category->name }}
@@ -39,7 +41,7 @@
                         </tbody>     
                     </table>
                     <div class="mb-4">
-                        <a href="{{ route('user.index') }}" class="btn btn-outline-dark">Back</a>
+                        <a href="{{ route('ticket.index') }}" class="btn btn-outline-dark">Back</a>
                     </div>       
                 </div>
             </div>
