@@ -56,7 +56,12 @@
                                 <td>{{ $ticket->title }}</td>
                                 <td>{{ $ticket->priority }}</td>
                                 <td>{{ $ticket->status }}</td>
-                                <td> <img src="{{ asset('storage/gallery/'. $ticket->file) }}" alt="{{ $ticket->name }}" style="max-width: 50px; max-height: 50px;" ></td>
+                                <td>
+                                @foreach ($ticket->ticketFiles as $file)
+                                    <img src="{{ asset('storage/gallery/'. $file->file_name) }}" alt="{{ $file->file_name }}" style="max-width: 50px; max-height: 50px;">
+                                @endforeach
+                                </td>
+                                @if(auth()->user()->role == '0' || auth()->user()->role == '1')
                                 <td>
                                     <a href="{{ route('ticket.edit', $ticket->id) }}" class="btn btn-outline-warning">
                                       <i class="fas fa-pencil-alt"></i>
@@ -70,6 +75,14 @@
                                     <button class="btn btn-outline-danger" onclick="return confirm('Are you sure you want to delete?')"><i class="fas fa-trash-alt"></i></button>
                                    </form>
                                 </td> 
+                                @endif
+                                @if(auth()->user()->role == '2')
+                                <td>
+                                <a href="{{ route('ticket.show', $ticket->id) }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-info"></i>
+                                </a>
+                                @endif
+                                </td>
                             </tr> 
                             @endforeach
                         

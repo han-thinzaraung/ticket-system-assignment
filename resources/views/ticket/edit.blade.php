@@ -28,14 +28,15 @@
                 </div>
 
                 <div class="col-auto">
-                    <label class="col-form-label">Upload Image<small class="text-danger">*</small></label>
-                    <input type="file"  class="form-control" name="file">
+                    <label class="col-form-label">Upload File<small class="text-danger">*</small></label>
+                    <input type="file"  class="form-control" name="files[]" multiple>
 
                     @error('file')
                     <div class="text-danger">*{{$message}}</div>
                     @enderror
 
                 </div>
+
 
                 <div class="col-auto">
                     <label for="priority">Select Priority:</label>
@@ -75,6 +76,21 @@
                         <label for="label{{ $label->id }}">{{ $label->name }}</label><br>
                     @endforeach
                 </div>
+
+                @if(auth()->user()->role == '0')
+                <div class="col-auto">
+                    <label for="agent_id">Select Agent To Assign:</label>
+                    <select name="agent_id" id="status" class="form-control @error('agent_id') is-invalid @enderror">
+                        @foreach($agent as $agent)
+                            <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                        @endforeach
+                    </select>
+
+                    @error('agent_id')
+                        <div class="text-danger">*{{$message}}</div>
+                    @enderror
+                </div>
+                @endif
 
                 <div class="col-sm mt-3">
                 <a href="{{ route('ticket.index') }}" class="btn btn-outline-dark">Back</a>

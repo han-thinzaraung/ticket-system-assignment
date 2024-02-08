@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Label;
 use App\Models\Category;
+use App\Models\TicketFile;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,6 +24,14 @@ class Ticket extends Model
     }
     public function comment(){
         return $this->hasMany(Comment::class);
+    }
+    public function ticketFiles()
+    {
+        return $this->hasMany(TicketFile::class);
+    }
+    public function agent()
+    {
+        return $this->belongsTo(User::class, 'agent_id');
     }
 
 }

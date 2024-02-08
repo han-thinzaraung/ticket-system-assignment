@@ -45,32 +45,34 @@ class TicketController extends Controller
      */
     public function store(StoreTicketRequest $request)
     {
-
-        $file = $request->file('file'); // Accessing the file correctly
- 
-        if ($file) {
-            $newName = "gallery_" . uniqid() . "." . $file->extension();
-            $file->storeAs("public/gallery", $newName);
-        } else {
-
-        }
- 
         $ticket = new Ticket();
         $ticket->title = $request->title;
         $ticket->description = $request->description;
-        $ticket->file = $newName;
         $ticket->priority = $request->priority;
         $ticket->status = $request->status;
-        // $ticket->file = $request->file;
         $ticket->save();
-        if($request->category_id){
-            $ticket->category()->attach($request->category_id);
+ 
+        foreach ($request->file('files') as $file) {
+            if ($file) {
+                $newName = "gallery_" . uniqid() . "." . $file->extension();
+                $file->storeAs("public/gallery", $newName);
+ 
+                // Create a file record in the ticket_files table
+                $ticket->ticketFiles()->create([
+                    'file_name' => $newName,
+                ]);
+            }
         }
-        if($request->label_id)
-        {
-            $ticket->label()->attach($request->label_id);
-        }
-        return redirect()->route('ticket.index')->with('success','Ticket is created successfully');
+ 
+            if ($request->category_id) {
+                $ticket->category()->attach($request->category_id);
+            }
+ 
+            if ($request->label_id) {
+                $ticket->label()->attach($request->label_id);
+            }
+ 
+            return redirect()->route('ticket.index')->with('success', 'Ticket is created successfully');
     }
 
     /**
@@ -96,7 +98,9 @@ class TicketController extends Controller
     {
         $categories = Category::all();
         $labels = Label::all();
-        return view('ticket.edit', compact('ticket','categories','labels'));
+        $users = User::all();
+        $agents = User::where('role', '1')->get();
+        return view('ticket.edit', compact('ticket','categories','labels','agents'));
     }
 
     /**
@@ -108,28 +112,33 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $file = $request->file('file'); // Accessing the file correctly
- 
-        if ($file) {
-            $newName = "gallery_" . uniqid() . "." . $file->extension();
-            $file->storeAs("public/gallery", $newName);
-        } else {
-
-        }
         $ticket->title = $request->title;
         $ticket->description = $request->description;
-        $ticket->file = $newName;
         $ticket->priority = $request->priority;
         $ticket->status = $request->status;
         $ticket->update();
-        if($request->category_id){
-            $ticket->category()->attach($request->category_id);
+ 
+        foreach ($request->file('files') as $file) {
+            if ($file) {
+                $newName = "gallery_" . uniqid() . "." . $file->extension();
+                $file->storeAs("public/gallery", $newName);
+ 
+                // Create a file record in the ticket_files table
+                $ticket->ticketFiles()->create([
+                    'file_name' => $newName,
+                ]);
+            }
         }
-        if($request->label_id)
-        {
-            $ticket->label()->attach($request->label_id);
-        }
-        return redirect()->route('ticket.index')->with('update','Ticket is Updated Successfully');
+ 
+            if ($request->category_id) {
+                $ticket->category()->attach($request->category_id);
+            }
+ 
+            if ($request->label_id) {
+                $ticket->label()->attach($request->label_id);
+            }
+ 
+            return redirect()->route('ticket.index')->with('success', 'Ticket is created successfully');
     }
 
     /**

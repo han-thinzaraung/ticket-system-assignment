@@ -25,6 +25,7 @@ class CreateTicketsTable extends Migration
         });
     }
 
+
     /**
      * Reverse the migrations.
      *

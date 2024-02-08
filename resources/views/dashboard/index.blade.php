@@ -66,6 +66,7 @@
  
       <!-- Sidebar Menu -->
       <nav class="mt-2">
+        @if(auth()->user()->role == '0')
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -104,8 +105,92 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="{{ route('category.create') }}" class="nav-link">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>
+                Create Category
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('category.index') }}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Category List
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('label.create') }}" class="nav-link">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>
+                Create Label
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('label.index') }}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Label List
+              </p>
+            </a>
+          </li>
+
 
         </ul>
+        @endif
+
+        @if(auth()->user()->role == '1')
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+          <li class="nav-item">
+            <a href="{{ route('ticket.create') }}" class="nav-link">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>
+                Create Ticket
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('ticket.index') }}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Ticket List
+              </p>
+            </a>
+          </li>
+        </ul>
+        @endif
+
+        @if(auth()->user()->role == '2')
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+          <li class="nav-item">
+            <a href="{{ route('ticket.create') }}" class="nav-link">
+              <i class="nav-icon fas fa-plus-circle"></i>
+              <p>
+                Create Ticket
+              </p>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a href="{{ route('ticket.index') }}" class="nav-link">
+              <i class="nav-icon fas fa-th"></i>
+              <p>
+                Ticket List
+              </p>
+            </a>
+          </li>
+        </ul>
+        @endif
+
       </nav>
       <!-- /.sidebar-menu -->
     </div>

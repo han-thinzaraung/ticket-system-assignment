@@ -29,13 +29,13 @@
 
 
                         <div class="col-auto">
-                            <label class="col-form-label">Upload Image<small class="text-danger">*</small></label>
-                            <input type="file"  class="form-control" name="file">
-
+                            <label class="col-form-label">Upload File<small class="text-danger">*</small></label>
+                            <input type="file"  class="form-control" name="files[]" multiple>
+ 
                             @error('file')
                             <div class="text-danger">*{{$message}}</div>
                             @enderror
-
+ 
                         </div>
 
 
@@ -77,7 +77,7 @@
                                 <label for="label{{ $label->id }}">{{ $label->name }}</label><br>
                             @endforeach
                         </div>
-
+                  
                         <div class="col-sm mt-3">
                             <a href="{{ route('ticket.index') }}" class="btn btn-outline-dark">Back</a>
                             <button type="submit" class="btn btn-outline-primary">Create</button>

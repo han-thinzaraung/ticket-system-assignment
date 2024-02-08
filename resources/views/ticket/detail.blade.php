@@ -26,7 +26,11 @@
                                 <td>{{ $ticket->description }}</td>
                                 <td>{{ $ticket->priority }}</td>
                                 <td>{{ $ticket->status }}</td>
-                                <td> <img src="{{ asset('storage/gallery/'. $ticket->file) }}" alt="{{ $ticket->name }}" style="max-width: 50px; max-height: 50px;" ></td>
+                                <td>
+                                    @foreach ($ticket->ticketFiles as $file)
+                                    <img src="{{ asset('storage/gallery/'. $file->file_name) }}" alt="{{ $file->file_name }}" style="max-width: 50px; max-height: 50px;">
+                                    @endforeach
+                                </td>
                                 <td>
                                   @foreach($ticket->category as $category)
                                         {{ $category->name }}
