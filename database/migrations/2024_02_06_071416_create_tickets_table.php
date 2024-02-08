@@ -20,7 +20,8 @@ class CreateTicketsTable extends Migration
             $table->longText('file')->nullable();
             $table->string('priority')->default('low');
             $table->string('status')->default('open');
-            // $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('agent_id')->nullable();
             $table->timestamps();
         });
     }

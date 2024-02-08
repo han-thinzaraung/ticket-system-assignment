@@ -72,7 +72,7 @@
                 <div class="mb-3 mt-2 col-auto">
                     <label for="role" class="form-label">Labels</label><br>
                     @foreach($labels as $label)
-                        <input type="checkbox" value="{{ $label->id }}" name="label_id[]">
+                        <input type="checkbox" value="{{ $label->id }}" name="label_id[]" {{ in_array($label->id, $existingLabels) ? 'checked' : '' }}>
                         <label for="label{{ $label->id }}">{{ $label->name }}</label><br>
                     @endforeach
                 </div>
@@ -81,7 +81,7 @@
                 <div class="col-auto">
                     <label for="agent_id">Select Agent To Assign:</label>
                     <select name="agent_id" id="status" class="form-control @error('agent_id') is-invalid @enderror">
-                        @foreach($agent as $agent)
+                        @foreach($agents as $agent)
                             <option value="{{ $agent->id }}">{{ $agent->name }}</option>
                         @endforeach
                     </select>
@@ -91,6 +91,8 @@
                     @enderror
                 </div>
                 @endif
+
+                <input type="hidden" name="user_id" value="{{ Auth()->user()->id }}">
 
                 <div class="col-sm mt-3">
                 <a href="{{ route('ticket.index') }}" class="btn btn-outline-dark">Back</a>

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ticket;
 use App\Models\Comment;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
@@ -16,8 +18,7 @@ class CommentController extends Controller
      */
     public function index()
     {
-        $comments = Comment::all();
-        return view('comment.index',compact('comments'));
+        
         
     }
 
@@ -28,7 +29,7 @@ class CommentController extends Controller
      */
     public function create()
     {
-  
+       
     }
 
     /**
@@ -46,6 +47,7 @@ class CommentController extends Controller
         $comment->save();
         return redirect()->back();
     }
+   
 
     /**
      * Display the specified resource.
@@ -55,7 +57,9 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
-        //
+        
+     
+  
     }
 
     /**
@@ -66,7 +70,9 @@ class CommentController extends Controller
      */
     public function edit(Comment $comment)
     {
-        //
+
+        $ticket = Ticket::find($comment->ticket_id);
+        return view('ticket.detail',compact('comment','ticket'));
     }
 
     /**
@@ -78,8 +84,14 @@ class CommentController extends Controller
      */
     public function update(UpdateCommentRequest $request, Comment $comment)
     {
-        //
+        $comment->message = $request->message;
+        $comment->user_id =Auth::user()->id;
+        $comment->ticket_id = $request->ticket_id;
+        $comment->update();
+        return redirect()->back();
+
     }
+  
 
     /**
      * Remove the specified resource from storage.
@@ -89,9 +101,14 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        if($comment){
-            $comment->delete();
+        if($comment->user_id === Auth::user()->id || Auth::user()->role === '0' || Auth::user()->role ==='1'){
+            if($comment){
+                $comment->delete();
+            }
+            return redirect()->back()->with('delete','Comment is Deleted Successfully');
+        }else{
+            return redirect()->back()->with('delete','Comment Deletion cannot be done because it can be done by Comment Writer Only');
         }
-        return redirect()->back()->with('delete','Comment is Deleted Successfully');
+      
     }
 }

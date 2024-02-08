@@ -45,6 +45,7 @@
                             <th scope="col">Priority</th>
                             <th scope="col">Status</th>
                             <th scope="col">Attached File</th>
+                            <th scope="col">Assigned Agent</th>
                             <th scope="col">Action</th>
                           </tr>
                         </thead>
@@ -61,6 +62,12 @@
                                     <img src="{{ asset('storage/gallery/'. $file->file_name) }}" alt="{{ $file->file_name }}" style="max-width: 50px; max-height: 50px;">
                                 @endforeach
                                 </td>
+                                @if($ticket->agent == null)
+                                    <td>No assigned Agent</td>
+                                @else
+                                    <td>{{ $ticket->agent->name }}</td>
+                                @endif
+    
                                 @if(auth()->user()->role == '0' || auth()->user()->role == '1')
                                 <td>
                                     <a href="{{ route('ticket.edit', $ticket->id) }}" class="btn btn-outline-warning">

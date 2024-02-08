@@ -63,18 +63,18 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3 mt-2 col-auto">
-                            <label for="role" class="form-label">Categories</label><br>
+                        <div class="mt-3 mb-2 col-auto">
+                            <label for="role" class="form-label">Categories</label><br/>
                             @foreach($categories as $category)
                                 <input type="checkbox" value="{{ $category->id }}" name="category_id[]">
-                                <label for="category{{ $category->id }}">{{ $category->name }}</label><br>
+                                <label for="category{{ $category->id }}">{{ $category->name }}</label>
                             @endforeach
                         </div>
                         <div class="mb-3 mt-2 col-auto">
-                            <label for="role" class="form-label">Labels</label><br>
+                            <label for="role" class="form-label">Labels</label><br/>
                             @foreach($labels as $label)
                                 <input type="checkbox" value="{{ $label->id }}" name="label_id[]">
-                                <label for="label{{ $label->id }}">{{ $label->name }}</label><br>
+                                <label for="label{{ $label->id }}">{{ $label->name }}</label>
                             @endforeach
                         </div>
                   
@@ -82,6 +82,7 @@
                             <a href="{{ route('ticket.index') }}" class="btn btn-outline-dark">Back</a>
                             <button type="submit" class="btn btn-outline-primary">Create</button>
                         </div> 
+                        <input type="hidden" name="user_id" value="{{ Auth()->user()->id }}">
                         
                     </form>
                 </div>

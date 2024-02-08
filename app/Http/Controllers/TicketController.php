@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Label;
 use App\Models\Ticket;
+use App\Models\Comment;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
 
@@ -18,9 +20,22 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::all();
-        return view('ticket.index',compact('tickets'));
-        // return view('index',compact('tickets'));
+        $user = auth()->user();
+
+        if ($user->role === '0') {
+            $tickets = Ticket::all();
+        } elseif ($user->role === '1') {
+            $tickets = Ticket::with('agent')
+                ->where(function ($query) use ($user) {
+                    $query->where('user_id', $user->id)
+                        ->orWhere('agent_id', $user->id);
+                })
+                ->get();
+        } else {
+            $tickets = Ticket::where('user_id', auth()->id())->get();
+        }
+        
+        return view('ticket.index', compact('tickets'));
     }
 
     /**
@@ -50,6 +65,7 @@ class TicketController extends Controller
         $ticket->description = $request->description;
         $ticket->priority = $request->priority;
         $ticket->status = $request->status;
+        $ticket->user_id = $request->user_id;
         $ticket->save();
  
         foreach ($request->file('files') as $file) {
@@ -72,7 +88,7 @@ class TicketController extends Controller
                 $ticket->label()->attach($request->label_id);
             }
  
-            return redirect()->route('ticket.index')->with('success', 'Ticket is created successfully');
+            return redirect()->route('ticket.index')->with('success', 'Ticket is Updated successfully');
     }
 
     /**
@@ -81,10 +97,11 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function show(Ticket $ticket)
+    public function show(Ticket $ticket,Comment $comment)
     {
         $categories = Category::all();
         $labels = Label::all();
+        $comment = Comment::find();
         return view('ticket.detail', compact('ticket','categories','labels'));
     }
 
@@ -96,11 +113,14 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
+        return $ticket;
+        $existingCategories = $ticket->category->pluck('id')->toArray();
+        $existingLabels = $ticket->label->pluck('id')->toArray();
         $categories = Category::all();
         $labels = Label::all();
         $users = User::all();
         $agents = User::where('role', '1')->get();
-        return view('ticket.edit', compact('ticket','categories','labels','agents'));
+        return view('ticket.edit', compact('ticket','categories','labels','agents','existingCategories','existingLabels'));
     }
 
     /**
@@ -112,33 +132,60 @@ class TicketController extends Controller
      */
     public function update(UpdateTicketRequest $request, Ticket $ticket)
     {
-        $ticket->title = $request->title;
-        $ticket->description = $request->description;
-        $ticket->priority = $request->priority;
-        $ticket->status = $request->status;
-        $ticket->update();
- 
-        foreach ($request->file('files') as $file) {
-            if ($file) {
-                $newName = "gallery_" . uniqid() . "." . $file->extension();
-                $file->storeAs("public/gallery", $newName);
- 
-                // Create a file record in the ticket_files table
-                $ticket->ticketFiles()->create([
-                    'file_name' => $newName,
-                ]);
+
+       // If new files are provided, delete existing files and update with new files
+        if ($request->hasFile('files')) {
+            // Delete existing files associated with the ticket
+            foreach ($ticket->ticketFiles as $file) {
+                Storage::delete("public/gallery/{$file->file_name}");
+                $file->delete();
             }
-        }
- 
+
+            // Update ticket information
+            $ticket->title = $request->title;
+            $ticket->description = $request->description;
+            $ticket->priority = $request->priority;
+            $ticket->status = $request->status;
+            $ticket->user_id = $request->user_id;
+            $ticket->agent_id = $request->agent_id;
+            $ticket->update();
+
+            // Upload new files
+            foreach ($request->file('files') as $file) {
+                if ($file) {
+                    $newName = "gallery_" . uniqid() . "." . $file->extension();
+                    $file->storeAs("public/gallery", $newName);
+
+                    // Create a file record in the ticket_files table
+                    $ticket->ticketFiles()->create([
+                        'file_name' => $newName,
+                    ]);
+                }
+            }
+            } else {
+                // If no new files are provided, update only the ticket information
+                $ticket->title = $request->title;
+                $ticket->description = $request->description;
+                $ticket->priority = $request->priority;
+                $ticket->status = $request->status;
+                $ticket->user_id = $request->user_id;
+                $ticket->agent_id = $request->agent_id;
+                $ticket->update();
+
+                
+            }
+
+            // Attach categories and labels if provided
             if ($request->category_id) {
-                $ticket->category()->attach($request->category_id);
+                $ticket->category()->sync($request->category_id);
             }
- 
+
             if ($request->label_id) {
-                $ticket->label()->attach($request->label_id);
+                $ticket->label()->sync($request->label_id);
             }
- 
-            return redirect()->route('ticket.index')->with('success', 'Ticket is created successfully');
+
+            return redirect()->route('ticket.index')->with('success', 'Ticket is updated successfully');
+
     }
 
     /**

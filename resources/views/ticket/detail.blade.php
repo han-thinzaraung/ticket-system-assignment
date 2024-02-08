@@ -6,6 +6,14 @@
             <div class="card">
                 <div class="card-body shadow">
                     <h3 class="text-dark mb-3"> Ticket Detail </h3>
+                    @if(session('delete'))
+                    <div class="alert alert-danger alert-dismissible" role="alert"> 
+                        <button type="button" class="close" data-dismiss="alert">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        {{ session('delete') }}
+                    </div>
+                    @endif
                     <table class="table">
                         <thead class="table-primary">
                         <tr>
@@ -80,6 +88,11 @@
                                     <p class="card-text">{{ $comment->message }}</p>
                                 </div>
                                 <div class="col-auto">
+                                    @if(auth()->user()->role == '0' || auth()->user()->role == '1')
+                                    <a href="{{ route('comment.edit', $comment->id) }}" class="btn btn-outline-warning">
+                                        <i class="fas fa-pencil-alt"></i>
+                                      </a>
+                                    @endif
                                     <form method="post" action = "{{ route('comment.destroy', $comment->id) }}" class="d-inline-block">
                                         @method('delete')
                                         @csrf
