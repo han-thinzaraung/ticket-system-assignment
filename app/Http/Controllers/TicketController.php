@@ -145,7 +145,7 @@ class TicketController extends Controller
             $ticket->description = $request->description;
             $ticket->priority = $request->priority;
             $ticket->status = $request->status;
-            $ticket->user_id = $request->user_id;
+            // $ticket->user_id = $request->user_id;
             $ticket->agent_id = $request->agent_id;
             $ticket->update();
 
@@ -167,7 +167,7 @@ class TicketController extends Controller
                 $ticket->description = $request->description;
                 $ticket->priority = $request->priority;
                 $ticket->status = $request->status;
-                $ticket->user_id = $request->user_id;
+                // $ticket->user_id = $request->user_id;
                 $ticket->agent_id = $request->agent_id;
                 $ticket->update();
 
