@@ -23,7 +23,7 @@
 
                 </div>
                 <div class="col-auto">
-                    <label  class="col-form-label">Email</label><small class="text-danger">*</small></label>
+                    <label  class="col-form-label">Email<small class="text-danger">*</small></label>
                     <input type="email"  class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $user->email }}">
 
                     @error('password')
@@ -33,7 +33,7 @@
                 </div>
 
                 <div class="col-auto">
-                    <label for="role">Select Role:</label>
+                    <label for="role">Select Role:<small class="text-danger">*</small></label>
                     <select name="role" id="role" class="form-control @error('role') is-invalid @enderror">
             
                             <option value="2">Regular User</option>

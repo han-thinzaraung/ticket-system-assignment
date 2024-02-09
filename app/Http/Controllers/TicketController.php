@@ -97,11 +97,10 @@ class TicketController extends Controller
      * @param  \App\Models\Ticket  $ticket
      * @return \Illuminate\Http\Response
      */
-    public function show(Ticket $ticket,Comment $comment)
+    public function show(Ticket $ticket)
     {
         $categories = Category::all();
         $labels = Label::all();
-        $comment = Comment::find();
         return view('ticket.detail', compact('ticket','categories','labels'));
     }
 
@@ -113,7 +112,7 @@ class TicketController extends Controller
      */
     public function edit(Ticket $ticket)
     {
-        return $ticket;
+        // return $ticket;
         $existingCategories = $ticket->category->pluck('id')->toArray();
         $existingLabels = $ticket->label->pluck('id')->toArray();
         $categories = Category::all();

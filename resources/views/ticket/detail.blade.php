@@ -66,21 +66,37 @@
                 <div class="col-md-6">
                     <div class="card">
                         <div class="card-body shadow">
+                            @if ($currentComment ?? false)
+                            <!-- Update comment form -->
+                           
+                                <form class="row g-2" action="{{ route('comment.update', $comment->id) }}" method="post">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="col-auto">
+                                        <label for="inputtext" class="">Comment</label>
+                                        <input type="text" class="form-control mb-3" id="inputtext" placeholder="Update comment" name="message" value="{{ $comment->message }}">
+                                        <input type="hidden" name="ticket_id" value="{{ $comment->ticket_id }}">
+                                        <button type="submit" class="btn btn-primary">Update</button>
+                                    </div>
+                                </form>
+                            @else
+                            <!-- Add comment form -->
                             <form class="row g-2" action="{{ route('comment.store') }}" method="post">
                                 @csrf
                                 <div class="col-auto">
-                                  <label for="inputtext" class="">Comment</label>
-                                  <input type="text" class="form-control mb-3" id="inputtext" placeholder="Add comment" name="message"> 
-                                  <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                                  <button type="submit" class="btn btn-primary">Send</button>
-                                  </div>
+                                    <label for="inputtext" class="">Comment</label>
+                                    <input type="text" class="form-control mb-3" id="inputtext" placeholder="Add comment" name="message">
+                                    <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
+                                    <button type="submit" class="btn btn-primary">Send</button>
+                                </div>
                             </form>
+                            @endif
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="card">
-                        @foreach($ticket->comment as $comment)
+                        @foreach($ticket->comments as $comment)
                         <div class="card-body shadow">
                             <div class="row justify-content-around">
                                 <div class="col-auto">

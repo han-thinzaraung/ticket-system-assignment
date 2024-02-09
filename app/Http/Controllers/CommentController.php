@@ -72,7 +72,8 @@ class CommentController extends Controller
     {
 
         $ticket = Ticket::find($comment->ticket_id);
-        return view('ticket.detail',compact('comment','ticket'));
+        $currentComment = $ticket->comments()->find($comment->id);
+        return view('ticket.detail',compact('comment','ticket','currentComment'));
     }
 
     /**
@@ -88,7 +89,8 @@ class CommentController extends Controller
         $comment->user_id =Auth::user()->id;
         $comment->ticket_id = $request->ticket_id;
         $comment->update();
-        return redirect()->back();
+        $ticket = Ticket::find($comment->ticket_id);
+        return redirect()->route('ticket.show',compact('ticket'));
 
     }
   
@@ -101,7 +103,7 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        if($comment->user_id === Auth::user()->id || Auth::user()->role === '0' || Auth::user()->role ==='1'){
+        if($comment->user_id === Auth::user()->id || Auth::user()->role === '0'){
             if($comment){
                 $comment->delete();
             }

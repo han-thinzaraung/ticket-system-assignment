@@ -29,7 +29,10 @@
 
                 <div class="col-auto">
                     <label class="col-form-label">Upload File<small class="text-danger">*</small></label>
-                    <input type="file"  class="form-control" name="files[]" multiple>
+                    @foreach ($ticket->ticketFiles as $file)
+                    <img src="{{ asset('storage/gallery/'. $file->file_name) }}" alt="{{ $file->file_name }}" style="max-width: 50px; max-height: 50px;" class="m-3">
+                    @endforeach
+                    <input type="file"  class="form-control mb-3" name="files[]" multiple>
 
                     @error('file')
                     <div class="text-danger">*{{$message}}</div>
@@ -40,9 +43,9 @@
 
                 <div class="col-auto">
                     <label for="priority">Select Priority:</label>
-                    <select name="priority" id="priority" class="form-control @error('priority') is-invalid @enderror">
-                            <option value="LOW">LOW</option>
-                            <option value="HIGH" selected>HIGH</option>
+                    <select name="priority" id="priority" class="form-control @error('priority') is-invalid @enderror" value="{{ $ticket->priority }}">
+                            <option value="LOW" @if($ticket->priority == 'LOW') selected @endif>LOW</option>
+                            <option value="HIGH" @if($ticket->priority == 'HIGH') selected @endif>HIGH</option>
                     </select>
 
                     @error('priority')
@@ -52,9 +55,9 @@
 
                 <div class="col-auto">
                     <label for="status">Select Status:</label>
-                    <select name="status" id="status" class="form-control @error('status') is-invalid @enderror">
-                            <option value="Open">Open</option>
-                            <option value="Closed">Closed</option>
+                    <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" value="{{ $ticket->status }}">
+                            <option value="Open" @if($ticket->status == 'Open') selected @endif>Open</option>
+                            <option value="Closed" @if($ticket->status == 'Closed') selected @endif>Closed</option>
                     </select>
 
                     @error('status')
@@ -63,17 +66,20 @@
                 </div>
 
                 <div class="mb-3 mt-2 col-auto">
-                    <label for="role" class="form-label">Categories</label><br>
+                    <label for="role" class="form-label">Categories<small class="text-danger">*</small></label><br>
                     @foreach($categories as $category)
-                        <input type="checkbox" value="{{ $category->id }}" name="category_id[]">
-                        <label for="category{{ $category->id }}">{{ $category->name }}</label><br>
+                        <input type="checkbox" value="{{ $category->id }}" name="category_id[]" {{ in_array($category->id, $existingLabels) ? 'checked' : '' }}> 
+                        <label for="category{{ $category->id }}" class="m-3">{{ $category->name }}</label>
                     @endforeach
+                    @error('category')
+                        <div class="text-danger">*{{$message}}</div>
+                    @enderror
                 </div>
                 <div class="mb-3 mt-2 col-auto">
-                    <label for="role" class="form-label">Labels</label><br>
+                    <label for="role" class="form-label">Labels<small class="text-danger">*</small></label><br>
                     @foreach($labels as $label)
                         <input type="checkbox" value="{{ $label->id }}" name="label_id[]" {{ in_array($label->id, $existingLabels) ? 'checked' : '' }}>
-                        <label for="label{{ $label->id }}">{{ $label->name }}</label><br>
+                        <label for="label{{ $label->id }}" class="m-3">{{ $label->name }}</label>
                     @endforeach
                 </div>
 
